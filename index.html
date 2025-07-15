@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PayloadPal [Filter Evasion Tool]</title>           
+      <meta charset="UTF-8">                                    
+      <meta name="author" content="Matthew Telfer (MLT)" />   <!-- will add everyone here, duh --> 
+      <meta name="description" content="This tool is an advanced PHP-Based Filter Evasion Payload Generator. It'll generate custom attack paylods based upon conditions selected by the user. NO ABUSE!">        
+      <meta name="keywords" content="PHP,Filter Evasion,Bugbounty,Bug Bounty,WAF,Web Application Firewall,Web Application Security,Bypass,infosec,websec,netsec,pentesting,penetration testing,payload,attack,vulnerability,zeroday,0day,owasp,hackerone,bugcrowd,scanner,IDS,intrusion detection system,hacking,hacker,hackers,script kiddies,skids,skiddies,blackhat,whitehat,hacks,pwnage">  
+      <meta name="robots" content="index, follow" />         
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link href="primary.css" rel="stylesheet">              
+      <link href="https://fonts.googleapis.com/css?family=Jura&display=swap" rel="stylesheet">
+      <script type="text/javascript" src="wut.js"></script>   													 
+  </head>
+	<body>
+	<center>
+	  <h2><u><b><div style="font-family: 'Jura', sans-serif;">Project Insecurity Presents - <i>PayloadPal:</i></div></b></u></h2>  
+	  <div style="font-family: 'Jura', sans-serif;">
+	    <p><b><i><u>PayloadPal</u></i></b> is an advanced web-based filter evasion payload generation tool:
+	    This software currently supports <b><i><u>XSS</u></i></b>, <b><i><u>SQLi</u></i></b>, <b><i><u>OS Command Injection</u></i></b>,
+	    <b><i><u>SSI Injection</u></i></b>, <b><i><u>Template Injection</u></i></b> <b><i><u>SSRF</u></i></b>, <b><i><u>File Inclusions</u></i></b>,
+	    <b><i><u>Open Redirects</u></i></b>, <b><i><u>XXE</u></i></b>, <b><i><u>LDAP Injection</u></i></b>, <b><i><u>Session Hijacking</u></i></b>, 
+	    <b><i><u>Rate Limit Bypass</u></i></b>, <b><i><u>HTTP Request Smuggling</u></i></b>, <b><i><u>HTTP HOST Header Injection</u></i></b>, 
+	    <b><i><u>NoSQL Injection</u></i></b>, <b><i><u>XPATH Injection</u></i></b> <b><i><u>CSRF Token Bypass</u></i></b>, <b><i><u>CSV Injection
+	    </u></i></b>, <b><i><u>Cross-Site Flashing</u></i></b>, <b><i><u>Reflected File Download</u></i></b>, and more!
+	    Support for new attack vectors will be added on a regular basis!</p>
+	  </div>
+	  <button onclick="javascript:wut();">Want more information regarding how this tool works?</button>
+	  </center>				  <!-- even *MORE* info for you dummiez out there -->
+	  <div id="green"><hr></div>
+	  <br />
+	  <div id="to_tha_left">
+	  <p><b><u>Please input your original payload below:</u></b></p>
+	  <input>
+	  <p><b><u>Please select the attack vector that your payload is for:</u></b></p>
+	  <form action="attacks.php" name="attack_vectors" method="POST">
+	  <select name="attacks[]" multiple="multiple">         
+	  <option value="XSS">Cross-Site Scripting</option>
+	  <option value="XSF">Cross-Site Flashing</option>
+	  <option value="SQLI">SQL Injection</option>
+	  <option value="Redirects">Open Redirection</option>
+	  <option value="RCE">OS Command Injection</option>
+	  <option value="LDAP">LDAP Injection</option>          <!-- So, what's your poison, bud? -->
+	  <option value="XPATH">XPATH Injection</option>
+	  <option value="SSI">SSI Injection</option>
+	  <option value="SSRF">Server-Side Request Forgery</option>
+	  <option value="LFI">Local File Inclusion</option>
+	  <option value="LFD">File Disclosure</option>
+	  <option value="FPD">Full Path Disclosure</option>
+	  <option value="DIT_TRAV">Directory Traversal</option>
+	  <option value="RL">Rate Limit Bypass</option>
+	  <option value="CRLF">HTTP Request Smuggling</option>
+	  <option value="XXE">XML External Entities</option>
+	  <option value="HAI_JACK">Session Hijacking</option>
+	  <option value="CSRF">CSRF Token Bypass</option>
+	  <option value="RL">Rate Limit Bypass</option>
+	  <option value="CRLF">HTTP Request Smuggling</option>
+	  <option value="TI">Template Injection</option>
+	  <option value="CSV">CSV Macro Injection</option>
+	  <option value="HOST">HTTP HOST Header Injection</option>
+	  <option value="RFD">Reflected File Download</option>
+	  </select>
+	  <p><b><u>If you have a list of chars/keywords that you <i>know</i><br />are blacklisted, then upload the list in CSV format here</br />so that we can work our payload wizardry</u></b>:</p>
+	  <form action="/analyze_payloads.php">
+	  <input type="file" id="CSV_Payloads" name="CSV_Payloads">
+	  <input type="submit">
+      </form>
+	      <p><b><u>Alternatively, enter all stripped/blacklisted/escaped<br /> characters and/or keywords as comma-seperated values in<br /> the form below:</u></b></p>
+		  <textarea id="blacklisted" rows="4" cols="50">make,sure,to,enter,%20,all,blacklisted,keywords,&,ch4rz,seperated,by,commas,like,this,!!</textarea>
+	  	  <p><b><u>Is this a Blind or Out-of-Band Attack?</u></b></p>
+	   Blind:<input type="radio" name="blindoob" value="blind"> OOB:<input type="radio" name="blindoob" value="OOB"> Neither:<input type="radio" name="blindoob" value="NA">
+	  	  <p><b><u>Do you want to attempt data exfiltration?</u></b></p>
+	  Yes:<input type="radio" name="str_replace" value="yup"> No:<input type="radio" name="str_replace" value="nah">
+	  	  <p><b><u>If yes, enter the IP and Port to exfiltrate the data to:</u></b></p>
+	  <label for="IP">IP Address:</label>
+	  <input type="text" name="ip" size="16" />
+	  <label for="PORT">Port:</label>
+	  <input type="text" name="port" size="5" />
+	  	  <p>blah</p>
+	  <input>
+	  	  <p>blah</p>
+	  <input>
+	  </div>
+	  <div id="to_tha_right">
+	  <p><b>Please select whether you want to use any encoding<br /> or obfuscation:</b></p>
+	  URL Encode:<input type="radio" name="encoding" value="URL Encoding"> Hex:<input type="checkbox" name="encoding" value="Hex Encoding"> Base64:<input type="checbox" name="encoding" value="Base64 Encoding"> Caeser:<input type="checkbox" name="encoding" value="caeser"><br /> Unicode:<input type="checkbox" name="encoding" value="Unicode"> Char Escapes:<input type="checkbox" name="encoding" value="HTML Char Escapes"><br />
+	  <p><b>Do you want a single payload, or multiple?</b></p>
+	  Single:<input type="radio" name="payloadnum" value="single"> Multiple:<input type="radio" name="payloadnum" value="multiple">
+	  <p><b>Do you want to attempt unsafe string replacement bypass?</b></p>
+	  Yes:<input type="radio" name="str_replace" value="yup"> No:<input type="radio" name="str_replace" value="nah">
+	  	  <p><b>Do you want to circumvent stripped/removed whitespace?</b></p>
+	  Yes:<input type="radio" name="str_replace" value="yup"> No:<input type="radio" name="str_replace" value="nah">
+	  	  <p>blah</p>
+	  <input>
+	  	  <p>blah</p>
+	  <input>
+	  	  <p>blah</p>
+	  <input>
+	   <p>blah</p>
+	  <input>
+	    <p>blah</p>
+	  <input>
+	   <p>blah</p>
+	  <input>
+	   <p>blah</p>
+	  <input>
+=
+	  </div>
+	  <center>
+	  <img src="pilogo.png" width="8%" height="8%" alt="logo" />
+	  <hr>
+	  <p>Once you're ready, <i>generate your payload(s)</i>:</p>
+	  <button type="submit" class="payload_submit">GENERATE!</button>
+	  <br />
+	  <hr>
+	  <br />
+	  <p>For more advanced features, consider <a href="#">registering</a>.<br />You will get access to a myriad of extensive features that are not available to unregisterd users. Also, if you can support our work, then donations are much appreciated and any proceeds from donations will go towards making this service more advanced!</p>
+	  	  <h3>Login Below:</h3>
+	  <div id="login">
+	  <form method="POST" name="login" action="user_login.php">
+	  <label for="login">Username:</label>
+	  <input type="text" name="login" /><br />
+	  <label for="pass">Password:</label>
+	  <input type="password" name="pass" />
+	  <br />
+	  <button type="submit" class="login">LOGIN</button>
+	  </div>
+	  </form><br /><br />
+	  	  <p><b><br /><br />Register below to access some more of our advanced features:</b></p>
+	   <button type="submit" class="register">REGISTER NOW</button>
+	  </div>
+	  <br />
+	  <hr>
+	  <br />
+	  <br />
+	  <br />
+	  <br />
+	  <br />
+	  <br />  <!-- YES, I *KNOW* using line breaks like this is dumb -->
+	  <br />  <!-- I will fix this via some rules in primary.css at some point -->
+	  <br />
+	  <br />
+	  <br />
+	  <br />
+	  <br />
+	  <br />
+	  <br />
+	  <br />
+	  <br />
+	 <p style="font-size:75%"><b>Written by <a href="https://uk.linkedin.com/in/matthew-telfer-bb2325167">MLT</a> of <a href="https://en.wikipedia.org/wiki/Project_Insecurity">Project Insecurity LTD</a> and <a href="https://net-defence.com">Net-Defence LTD</a></b> - <b>v1.1</b> - Release date: March 2020 - An <a href="https://mlt.sh/">[MLT.SH]</a> &amp; <a href="https://twitter.com/insecurity">@insecurity</a> Production!<br />Please for the love of God, read the <a href="#">Terms of Service</a> before using this tool. Any form of abuse will result in you being blacklisted!<br /><br >Found a security issue? <a href="vulnerability_reward_program.html">Report it here!</a></p>    
+	  </center>											
+</body>
+</html>
